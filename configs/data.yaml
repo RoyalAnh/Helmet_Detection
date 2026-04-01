@@ -1,0 +1,19 @@
+# Helmet Detection Dataset config
+#
+# Recommended dataset layout:
+#   data/
+#   ├── images/
+#   │   ├── train/   (~70%)
+#   │   ├── val/     (~20%)
+#   │   └── test/    (~10%)
+#   └── labels/      (same structure, YOLO .txt format)
+
+path: ./data
+train: train/images
+val:   val/images
+test:  test/images
+
+nc: 2
+names:
+  0: helmet          # person wearing helmet
+  1: no_helmet       # person NOT wearing helmet
