@@ -1,0 +1,7 @@
+.pytest_cache
+.env
+venv
+__pycache__
+output
+data
+test_single
