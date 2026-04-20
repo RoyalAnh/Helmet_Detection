@@ -21,16 +21,31 @@ def draw_detection(
 ) -> None:
     """Draw bbox + label in-place (modifies frame)."""
     x1, y1, x2, y2 = (int(v) for v in bbox)
+    h, w = frame.shape[:2]
     cv2.rectangle(frame, (x1, y1), (x2, y2), color, thickness)
 
-    (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.55, 1)
-    cv2.rectangle(frame, (x1, y1 - th - 8), (x1 + tw + 4, y1), color, -1)
-    cv2.putText(
-        frame, label, (x1 + 2, y1 - 4),
-        cv2.FONT_HERSHEY_SIMPLEX, 0.55, (255, 255, 255), 1, cv2.LINE_AA,
-    )
+    font_scale = 0.4
+    font_thickness = 1
+    (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, font_scale, font_thickness)
 
+    # label position with y (bounding box)
+    if y1 - th - 4 >= 0:
+        y_label = y1 - th - 4  # trên
+        y_text = y_label + th
+    else:
+        y_label = y2 + 4       # dưới
+        y_text = y_label + th
 
+    # label position with x (avoid overtaking on the right (image))
+    x_label = x1
+    if x1 + tw + 4 > w:
+        x_label = max(0, w - tw - 4)  # move inward
+
+    # Draw rectangle + text
+    cv2.rectangle(frame, (x_label, y_label), (x_label + tw + 4, y_label + th + 4), color, -1)
+    cv2.putText(frame, label, (x_label + 2, y_text),
+                cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), font_thickness, cv2.LINE_AA)
+    
 def draw_stats_overlay(
     frame: np.ndarray,
     fps_history: deque,
