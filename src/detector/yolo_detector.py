@@ -15,8 +15,8 @@ class YOLODetector:
     def __init__(self, settings: Settings) -> None:
         self._cfg = settings
         self._model = YOLO(settings.model_path)
-        # self._model.to(settings.device) # best.pt
-        self._model = YOLO("weights/best.onnx")
+        self._model.to(settings.device) # best.pt
+        # self._model = YOLO("weights/best.onnx") # for ONNX, but ultralytics doesn't support ONNX yet
 
     def detect(self, frame: np.ndarray) -> list[Detection]:
         """Run inference on one BGR frame; return all detections."""
