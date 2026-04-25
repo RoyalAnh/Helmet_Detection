@@ -89,7 +89,12 @@ def main():
             if writer:
                 writer.write(frame)
             if not args.no_display:
-                cv2.imshow("Helmet Detection", frame)
+                max_w, max_h = 1280, 720
+                scale = min(max_w / frame.shape[1], max_h / frame.shape[0])
+                display_w = int(frame.shape[1] * scale)
+                display_h = int(frame.shape[0] * scale)
+                display = cv2.resize(frame, (display_w, display_h))
+                cv2.imshow("Helmet Detection", display)
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
     finally:
